@@ -1,0 +1,5 @@
+views\CadPessoas.class
+models\Pessoa.class
+views\CadPessoas$1.class
+tools\CaixaDeDialogo.class
+connection\Conexao.class
