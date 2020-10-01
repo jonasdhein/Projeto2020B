@@ -17,7 +17,7 @@ public boolean validarLogin(String login, String senha)
             SQL = " SELECT * ";
             SQL += " FROM usuarios ";
             SQL += " WHERE login = '" + login + "'";
-            SQL += " AND senha em MD5 = '" + senha + "'";
+            SQL += " AND senha = md5('" + senha + "')";
 
             try{
                 System.out.println("Vai Executar Conexão em buscar");

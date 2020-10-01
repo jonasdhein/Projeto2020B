@@ -29,15 +29,15 @@ import models.Candidato;
  */
 public class CandidatoController {
     
-    Candidato objCandidato;
-    JTable jtbCandidatos = null;
+    //Candidato objCandidato;
+    //JTable jtbCandidatos = null;
     
-    public CandidatoController(Candidato objCandidato, JTable jtbCandidatos) {
+    /*public CandidatoController(Candidato objCandidato, JTable jtbCandidatos) {
         this.objCandidato = objCandidato;
         this.jtbCandidatos = jtbCandidatos;
-    }
+    }*/
     
-    public boolean incluir(){
+    public boolean incluir(Candidato objeto){
         
         Conexao.abreConexao();
         Connection con = Conexao.getConnection();
@@ -45,9 +45,9 @@ public class CandidatoController {
         
         try{
             stmt = con.prepareStatement("INSERT INTO candidatos(nome, id_bairro, data_nascimento) VALUES(?,?,?)");
-            stmt.setString(1, objCandidato.getNome());
-            stmt.setInt(2, objCandidato.getId_bairro());
-            Date data_nasc = Date.valueOf(objCandidato.getData_nascimento());  
+            stmt.setString(1, objeto.getNome());
+            stmt.setInt(2, objeto.getId_bairro());
+            Date data_nasc = Date.valueOf(objeto.getData_nascimento());  
             stmt.setDate(3, data_nasc);
             
             stmt.executeUpdate();
@@ -65,7 +65,7 @@ public class CandidatoController {
         }
     }
     
-    public boolean alterar(){
+    public boolean alterar(Candidato objeto){
         
         Conexao.abreConexao();
         Connection con = Conexao.getConnection();
@@ -73,8 +73,8 @@ public class CandidatoController {
         
         try {
             stmt = con.prepareStatement("UPDATE candidatos SET nome=?, id_bairro=? WHERE id=?");
-            stmt.setString(1, objCandidato.getNome());
-            stmt.setInt(2, objCandidato.getId());
+            stmt.setString(1, objeto.getNome());
+            stmt.setInt(2, objeto.getId());
             
             stmt.executeUpdate();
             
@@ -89,23 +89,24 @@ public class CandidatoController {
         
     }
     
-    public void preencher() {
+    public void preencher(JTable jtbCandidatos) {
 
         Conexao.abreConexao();
         
         Vector<String> cabecalhos = new Vector<String>();
         Vector dadosTabela = new Vector(); //receber os dados do banco
         
-        cabecalhos.add("Código");
+        cabecalhos.add("#");
         cabecalhos.add("Nome");
-        cabecalhos.add("Excluir");
+        cabecalhos.add("Nascimento");
+        cabecalhos.add("E");
              
         ResultSet result = null;
         
         try {
 
             String SQL = "";
-            SQL = " SELECT id, nome ";
+            SQL = " SELECT id, nome, TO_CHAR(data_nascimento, 'dd/mm/yyyy') as data_formatada ";
             SQL += " FROM candidatos ";
             SQL += " ORDER BY nome ";
             
@@ -117,7 +118,8 @@ public class CandidatoController {
                 
                 linha.add(result.getInt(1));
                 linha.add(result.getString(2));
-                linha.add("");
+                linha.add(result.getString(3));
+                linha.add("X");
                 
                 dadosTabela.add(linha);
             }
@@ -141,16 +143,19 @@ public class CandidatoController {
 
         // redimensiona as colunas de uma tabela
         TableColumn column = null;
-        for (int i = 0; i <= 2; i++) {
+        for (int i = 0; i <= 3; i++) {
             column = jtbCandidatos.getColumnModel().getColumn(i);
             switch (i) {
                 case 0:
                     column.setPreferredWidth(60);
                     break;
                 case 1:
-                    column.setPreferredWidth(230);
+                    column.setPreferredWidth(200);
                     break;
                 case 2:
+                    column.setPreferredWidth(90);
+                    break;
+                case 3:
                     column.setPreferredWidth(10);
                     break;
             }
@@ -177,6 +182,8 @@ public class CandidatoController {
     
     public Candidato buscar(String id)
     {
+        Candidato objCandidato = new Candidato();
+        
         try {
             Conexao.abreConexao();
             ResultSet rs = null;
@@ -191,7 +198,6 @@ public class CandidatoController {
                 rs = Conexao.stmt.executeQuery(SQL);
                 System.out.println("Executou Conexão em buscar");
 
-                objCandidato = new Candidato();
                 if(rs.next() == true)
                 {
                     objCandidato.setId(rs.getInt(1));
@@ -215,7 +221,7 @@ public class CandidatoController {
         return objCandidato;
     }
     
-    public boolean excluir(){
+    /*public boolean excluir(){
         
         Conexao.abreConexao();
         Connection con = Conexao.getConnection();
@@ -235,6 +241,6 @@ public class CandidatoController {
         }finally{
             Conexao.closeConnection(con, stmt);
         }
-    }
+    }*/
     
 }
