@@ -3,6 +3,8 @@ package views;
 import controllers.CandidatoController;
 import models.Candidato;
 import tools.CaixaDeDialogo;
+import tools.Combos;
+import tools.Formatacao;
 import tools.Validacao;
 
 /**
@@ -11,15 +13,24 @@ import tools.Validacao;
  */
 public class CadCandidatos extends javax.swing.JFrame {
 
+    Combos cbBairro;
     Candidato objCandidato;
     CandidatoController objCandidatoControle;
     //Combos cbCombos;
-    
+
     public CadCandidatos() {
         initComponents();
-        
-        //preencher combo
-        
+
+        try {
+
+            //preencher combo
+            cbBairro = new Combos(jcbBairro);
+            cbBairro.preencheCombo("SELECT id, nome FROM bairros ORDER BY nome");
+
+        } catch (Exception ex) {
+            CaixaDeDialogo.obterinstancia().exibirMensagem(ex.getMessage());
+        }
+
         limparTela();
     }
 
@@ -46,10 +57,11 @@ public class CadCandidatos extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         txtEmail = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
-        jcbBairro = new javax.swing.JComboBox<>();
         jLabel8 = new javax.swing.JLabel();
+        jcbBairro = new javax.swing.JComboBox<>();
+        txtTelefone = new javax.swing.JFormattedTextField();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         btnSalvar.setText("SALVAR");
         btnSalvar.addActionListener(new java.awt.event.ActionListener() {
@@ -105,14 +117,22 @@ public class CadCandidatos extends javax.swing.JFrame {
         jLabel7.setText("Bairro *");
 
         jLabel8.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jLabel8.setText("E-mail *");
+        jLabel8.setText("E-mail");
+
+        jcbBairro.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        try {
+            txtTelefone.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("(##) #####-####")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(0, 6, Short.MAX_VALUE)
+                .addGap(6, 6, 6)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(140, 140, 140)
@@ -127,23 +147,9 @@ public class CadCandidatos extends javax.swing.JFrame {
                         .addComponent(jLabel4))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(30, 30, 30)
-                        .addComponent(txtNome, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(10, 10, 10)
-                        .addComponent(txtDataNasc, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(30, 30, 30)
                         .addComponent(jLabel8)
                         .addGap(225, 225, 225)
                         .addComponent(jLabel3))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(30, 30, 30)
-                        .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(30, 30, 30)
-                        .addComponent(jLabel7))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(30, 30, 30)
-                        .addComponent(jcbBairro, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(160, 160, 160)
                         .addComponent(btnSalvar)
@@ -152,13 +158,29 @@ public class CadCandidatos extends javax.swing.JFrame {
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 470, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(10, 10, 10)
-                        .addComponent(jLabel5)))
-                .addGap(0, 7, Short.MAX_VALUE))
+                        .addComponent(jLabel5))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addGroup(layout.createSequentialGroup()
+                            .addGap(30, 30, 30)
+                            .addComponent(txtNome, javax.swing.GroupLayout.PREFERRED_SIZE, 252, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(18, 18, 18)
+                            .addComponent(txtDataNasc))
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 252, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                    .addGap(30, 30, 30)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jLabel7)
+                                        .addComponent(jcbBairro, javax.swing.GroupLayout.PREFERRED_SIZE, 252, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addGap(18, 18, 18)
+                            .addComponent(txtTelefone, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(7, 7, 7))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(0, 7, Short.MAX_VALUE)
+                .addGap(0, 8, Short.MAX_VALUE)
                 .addComponent(jLabel6)
                 .addGap(13, 13, 13)
                 .addComponent(lblId)
@@ -175,10 +197,12 @@ public class CadCandidatos extends javax.swing.JFrame {
                     .addComponent(jLabel8)
                     .addComponent(jLabel3))
                 .addGap(6, 6, 6)
-                .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(8, 8, 8)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtTelefone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel7)
-                .addGap(6, 6, 6)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jcbBairro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(28, 28, 28)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -188,66 +212,89 @@ public class CadCandidatos extends javax.swing.JFrame {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
                 .addComponent(jLabel5)
-                .addGap(0, 7, Short.MAX_VALUE))
+                .addGap(0, 8, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
-        try{
+        try {
             boolean retorno;
             //validar os campos
-            if(txtNome.getText().trim().length() == 0){
-                CaixaDeDialogo.obterinstancia().exibirMensagem("Informe um nome corretamente", 'a');
-                return;
-            }
-            if(!Validacao.validarData(txtDataNasc.getText())){
-                CaixaDeDialogo.obterinstancia().exibirMensagem("Informe uma data corretamente", 'a');
-                return;
+            retorno = validarDados();
+            if (retorno) {
+                
+                objCandidato = new Candidato();
+                
+                objCandidato.setNome(txtNome.getText());
+                String data = Formatacao.ajustaDataAMD(txtDataNasc.getText());
+                objCandidato.setData_nascimento(data);
+                objCandidato.setEmail(txtEmail.getText());
+                String telefone = Formatacao.retornaApenasNumeros(txtTelefone.getText());
+                objCandidato.setTelefone(telefone);
+                
+                Combos objCombo = (Combos) jcbBairro.getSelectedItem();
+                String id_bairro = objCombo.getCodigo();
+                objCandidato.setId_bairro(Integer.parseInt(id_bairro));
+                
+                CandidatoController objCandController = new CandidatoController();
+                if(lblId.getText().equals("ID")){
+                    retorno = objCandController.incluir(objCandidato);
+                }else{
+                    objCandidato.setId(Integer.parseInt(lblId.getText()));
+                    retorno = objCandController.alterar(objCandidato);
+                }
+                
+                if(retorno == false){
+                    CaixaDeDialogo.obterinstancia().exibirMensagem("Erro ao alterar/incluir", "Erro", 'e');
+                }else{
+                    limparTela();
+                }                
+                
             }
 
             atualizarTabela();
 
-        }catch(Exception ex){
+        } catch (Exception ex) {
             CaixaDeDialogo.obterinstancia().exibirMensagem("Erro ao tentar incluir");
             System.out.println("ERRO: " + ex.getMessage().toString());
         }
     }//GEN-LAST:event_btnSalvarActionPerformed
 
     private void jtbCandidatosMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtbCandidatosMousePressed
-        try{
+        try {
 
             //pega a linha selecionada
             int linhaSelecionada = jtbCandidatos.getSelectedRow();
-            
+
             // Primeira coluna da linha
-            String codigo = jtbCandidatos.getModel().getValueAt(linhaSelecionada, 0).toString(); 
-            
-            //Verifica se clicou na coluna 2 => EXCLUIR
-            if(jtbCandidatos.isColumnSelected(2)){
-                try{
+            String codigo = jtbCandidatos.getModel().getValueAt(linhaSelecionada, 0).toString();
+
+            //Verifica se clicou na coluna 3 => EXCLUIR
+            if (jtbCandidatos.isColumnSelected(3)) {
+                try {
                     boolean wPergunta = CaixaDeDialogo.obterinstancia()
-                            .pedirConfirmacao("Tem certeza de que deseja excluir?","",'p');
-                    if (wPergunta == true){
+                            .pedirConfirmacao("Tem certeza de que deseja excluir?", "", 'p');
+                    if (wPergunta == true) {
                         //exclusão do registro selecionado
                     }
 
                     atualizarTabela();
 
-                }catch(Exception ex){
+                } catch (Exception ex) {
                     CaixaDeDialogo.obterinstancia().exibirMensagem("Erro: " + ex.getMessage());
                 }
-            }else{
+            } else {
                 //buscar no banco de dados o registro e preencher nos campos da tela
                 CandidatoController candController = new CandidatoController();
                 Candidato objeto = candController.buscar(codigo);
-                if(objeto != null){
+                if (objeto != null) {
                     preencherCampos(objeto);
                 }
             }
 
-        }catch(Exception ex){
+        } catch (Exception ex) {
             CaixaDeDialogo.obterinstancia().exibirMensagem(ex.getMessage(), 'e');
         }
 
@@ -257,43 +304,72 @@ public class CadCandidatos extends javax.swing.JFrame {
         limparTela();
     }//GEN-LAST:event_btnLimparActionPerformed
 
-    
-    private void limparTela(){
-        try{
+    private boolean validarDados() {
+
+        if (txtNome.getText().trim().length() == 0) {
+            CaixaDeDialogo.obterinstancia().exibirMensagem("Informe um nome corretamente", 'a');
+            return false;
+        }
+        if (!Validacao.validarData(txtDataNasc.getText())) {
+            CaixaDeDialogo.obterinstancia().exibirMensagem("Informe uma data corretamente", 'a');
+            return false;
+        }
+        if (!txtEmail.getText().equals("")) {
+            if (!Validacao.validarEmail(txtEmail.getText())) {
+                CaixaDeDialogo.obterinstancia().exibirMensagem("Informe um email válido", 'a');
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private void limparTela() {
+        try {
             lblId.setText("ID");
             txtNome.setText("");
             txtDataNasc.setText("");
             txtEmail.setText("");
-            
+            txtTelefone.setText("");
+            jcbBairro.setSelectedIndex(0);
+
             atualizarTabela();
-            
-        }catch(Exception ex){
+
+        } catch (Exception ex) {
             CaixaDeDialogo.obterinstancia().exibirMensagem("Erro: " + ex.getMessage());
         }
-    }   
-    
-    private void preencherCampos(Candidato objeto){
-        try{
+    }
+
+    private void preencherCampos(Candidato objeto) {
+        try {
             lblId.setText(String.valueOf(objeto.getId()));
             txtNome.setText(objeto.getNome());
-                       
+            txtEmail.setText(objeto.getEmail());
+            txtTelefone.setText(objeto.getTelefone());
+
+            //Precisamos formatar a data antes de preencher no campo txtDataNasc
+            String data_dma = Formatacao.ajustaDataDMA(objeto.getData_nascimento());
+            txtDataNasc.setText(data_dma);
+
+            cbBairro.setaComboBox(String.valueOf(objeto.getId_bairro()));
             atualizarTabela();
-            
-        }catch(Exception ex){
+
+        } catch (Exception ex) {
             CaixaDeDialogo.obterinstancia().exibirMensagem("Erro: " + ex.getMessage());
         }
-    }   
-    
-    private void atualizarTabela(){
-        try{
-            
+    }
+
+    private void atualizarTabela() {
+        try {
+
             objCandidatoControle = new CandidatoController();
             objCandidatoControle.preencher(jtbCandidatos);
-            
-        }catch(Exception ex){
+
+        } catch (Exception ex) {
             CaixaDeDialogo.obterinstancia().exibirMensagem("ERRO:" + ex.getMessage());
         }
     }
+
     /**
      * @param args the command line arguments
      */
@@ -346,5 +422,6 @@ public class CadCandidatos extends javax.swing.JFrame {
     private javax.swing.JTextField txtDataNasc;
     private javax.swing.JTextField txtEmail;
     private javax.swing.JTextField txtNome;
+    private javax.swing.JFormattedTextField txtTelefone;
     // End of variables declaration//GEN-END:variables
 }

@@ -4,12 +4,15 @@ import connection.Conexao;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import models.Candidato;
+import models.Usuario;
 
 public class UsuarioController {
 
-public boolean validarLogin(String login, String senha)
+public Usuario validarLogin(String login, String senha)
     {
+        Usuario objUsuario;
         try {
+            
             Conexao.abreConexao();
             ResultSet rs = null;
 
@@ -26,22 +29,27 @@ public boolean validarLogin(String login, String senha)
 
                 if(rs.next() == true)
                 {
-                    return true;
+                    objUsuario = new Usuario();
+                    objUsuario.setId(rs.getInt("id"));
+                    objUsuario.setLogin(rs.getString("login"));
+                    objUsuario.setNome(rs.getString("nome"));
+                    
+                    return objUsuario;
                 }
             }
 
             catch (SQLException ex )
             {
                 System.out.println("ERRO de SQL: " + ex.getMessage().toString());
-                return false;
+                return null;
             }
 
         } catch (Exception e) {
             System.out.println("ERRO: " + e.getMessage().toString());
-            return false;
+            return null;
         }
         
-        return false;
+        return null;
     }
     
 }

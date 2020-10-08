@@ -44,15 +44,15 @@ public class CandidatoController {
         PreparedStatement stmt = null;
         
         try{
-            stmt = con.prepareStatement("INSERT INTO candidatos(nome, id_bairro, data_nascimento) VALUES(?,?,?)");
+            stmt = con.prepareStatement("INSERT INTO candidatos(nome, id_bairro, data_nascimento, telefone, email) VALUES(?,?,?,?,?)");
             stmt.setString(1, objeto.getNome());
             stmt.setInt(2, objeto.getId_bairro());
             Date data_nasc = Date.valueOf(objeto.getData_nascimento());  
             stmt.setDate(3, data_nasc);
+            stmt.setString(4, objeto.getTelefone());
+            stmt.setString(5, objeto.getEmail());
             
             stmt.executeUpdate();
-            
-            return true;
             
         }catch (SQLException ex) {
             System.out.println(ex.getMessage());
@@ -62,6 +62,7 @@ public class CandidatoController {
             return false;
         }finally{
             Conexao.closeConnection(con, stmt);
+            return true;
         }
     }
     
@@ -72,19 +73,23 @@ public class CandidatoController {
         PreparedStatement stmt = null;
         
         try {
-            stmt = con.prepareStatement("UPDATE candidatos SET nome=?, id_bairro=? WHERE id=?");
+            stmt = con.prepareStatement("UPDATE candidatos SET nome=?, id_bairro=?, data_nascimento=?, telefone=?, email=? WHERE id=?");
             stmt.setString(1, objeto.getNome());
-            stmt.setInt(2, objeto.getId());
+            stmt.setInt(2, objeto.getId_bairro());
+            Date data_nasc = Date.valueOf(objeto.getData_nascimento());  
+            stmt.setDate(3, data_nasc);
+            stmt.setString(4, objeto.getTelefone());
+            stmt.setString(5, objeto.getEmail());
+            stmt.setInt(6, objeto.getId());
             
             stmt.executeUpdate();
-            
-            return true;
             
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
             return false;
         }finally{
             Conexao.closeConnection(con, stmt);
+            return true;
         }
         
     }
@@ -188,21 +193,26 @@ public class CandidatoController {
             Conexao.abreConexao();
             ResultSet rs = null;
 
-            String SQL = "";
-            SQL = " SELECT id, nome, id_bairro, data_nascimento ";
-            SQL += " FROM candidatos ";
-            SQL += " WHERE id = '" + id + "'";
+            String wSql = "";
+            wSql = " SELECT id, nome, id_bairro, data_nascimento, ";
+            wSql += " COALESCE(telefone,'') as telefone, COALESCE(email,'') as email ";
+            wSql += " FROM candidatos ";
+            wSql += " WHERE id = '" + id + "'";
 
             try{
                 System.out.println("Vai Executar Conexão em buscar");
-                rs = Conexao.stmt.executeQuery(SQL);
+                rs = Conexao.stmt.executeQuery(wSql);
                 System.out.println("Executou Conexão em buscar");
 
                 if(rs.next() == true)
                 {
                     objCandidato.setId(rs.getInt(1));
                     objCandidato.setNome(rs.getString(2));
-                    //FALTA OS DEMAIS CAMPOS!!!
+                    objCandidato.setId_bairro(rs.getInt(3));
+                    objCandidato.setData_nascimento(rs.getString(4));
+                    objCandidato.setTelefone(rs.getString(5));
+                    objCandidato.setEmail(rs.getString(6));
+                    
                 }
             }
 

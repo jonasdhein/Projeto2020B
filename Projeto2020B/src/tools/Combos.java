@@ -12,6 +12,7 @@ import java.sql.ResultSet;
  * @author Jonas Dhein
  */
 public class Combos {
+    
     private String codigo;
     private String descricao;
     JComboBox cbCombo = null;
@@ -56,7 +57,7 @@ public class Combos {
         return descricao;
     }
 
-    public int SetaComboBox(String wValue){
+    public int setaComboBox(String wValue){
 
         for(int i = 0; i < cbCombo.getItemCount() ;  i++ ){
             Combos c = new Combos();
@@ -69,7 +70,7 @@ public class Combos {
         return 1;
     }
 
-    public int PreencheCombo(String wSQL) throws SQLException{
+    public int preencheCombo(String wSQL) throws SQLException{
             
         Conexao.abreConexao();
         result = Conexao.stmt.executeQuery(wSQL);

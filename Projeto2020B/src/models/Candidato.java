@@ -6,6 +6,8 @@ public class Candidato {
     private String nome;
     private int id_bairro;
     private String data_nascimento;
+    private String telefone;
+    private String email;
 
     public int getId() {
         return id;
@@ -38,6 +40,24 @@ public class Candidato {
     public void setData_nascimento(String data_nascimento) {
         this.data_nascimento = data_nascimento;
     }
+
+    public String getTelefone() {
+        return telefone;
+    }
+
+    public void setTelefone(String telefone) {
+        this.telefone = telefone;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+    
+    
     
     
     
