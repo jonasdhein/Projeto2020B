@@ -249,6 +249,7 @@ public class CadCandidatos extends javax.swing.JFrame {
                 if(retorno == false){
                     CaixaDeDialogo.obterinstancia().exibirMensagem("Erro ao alterar/incluir", "Erro", 'e');
                 }else{
+                    CaixaDeDialogo.obterinstancia().exibirMensagem("Registro alterado/incluído com sucesso", "Sucesso", 'i');
                     limparTela();
                 }                
                 
@@ -272,12 +273,23 @@ public class CadCandidatos extends javax.swing.JFrame {
             String codigo = jtbCandidatos.getModel().getValueAt(linhaSelecionada, 0).toString();
 
             //Verifica se clicou na coluna 3 => EXCLUIR
+            //buscar no banco de dados o registro e preencher nos campos da tela
+            CandidatoController candController = new CandidatoController();
+            Candidato objeto = candController.buscar(codigo);
+                
             if (jtbCandidatos.isColumnSelected(3)) {
                 try {
                     boolean wPergunta = CaixaDeDialogo.obterinstancia()
                             .pedirConfirmacao("Tem certeza de que deseja excluir?", "", 'p');
                     if (wPergunta == true) {
                         //exclusão do registro selecionado
+                        CandidatoController objController = new CandidatoController();
+                        boolean retorno = objController.excluir(objeto);
+                        if(retorno){
+                            CaixaDeDialogo.obterinstancia().exibirMensagem("Registro excluído com sucesso");
+                        }else{
+                            CaixaDeDialogo.obterinstancia().exibirMensagem("Erro ao excluir");
+                        }
                     }
 
                     atualizarTabela();
@@ -286,9 +298,6 @@ public class CadCandidatos extends javax.swing.JFrame {
                     CaixaDeDialogo.obterinstancia().exibirMensagem("Erro: " + ex.getMessage());
                 }
             } else {
-                //buscar no banco de dados o registro e preencher nos campos da tela
-                CandidatoController candController = new CandidatoController();
-                Candidato objeto = candController.buscar(codigo);
                 if (objeto != null) {
                     preencherCampos(objeto);
                 }

@@ -8,6 +8,7 @@ public class Candidato {
     private String data_nascimento;
     private String telefone;
     private String email;
+    private boolean excluido;
 
     public int getId() {
         return id;
@@ -55,6 +56,14 @@ public class Candidato {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public boolean isExcluido() {
+        return excluido;
+    }
+
+    public void setExcluido(boolean excluido) {
+        this.excluido = excluido;
     }
     
     

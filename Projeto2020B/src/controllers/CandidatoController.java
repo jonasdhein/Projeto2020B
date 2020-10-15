@@ -110,12 +110,13 @@ public class CandidatoController {
         
         try {
 
-            String SQL = "";
-            SQL = " SELECT id, nome, TO_CHAR(data_nascimento, 'dd/mm/yyyy') as data_formatada ";
-            SQL += " FROM candidatos ";
-            SQL += " ORDER BY nome ";
+            String wSql = "";
+            wSql = " SELECT id, nome, TO_CHAR(data_nascimento, 'dd/mm/yyyy') as data_formatada ";
+            wSql += " FROM candidatos ";
+            wSql += " WHERE COALESCE(excluido,false) is false ";
+            wSql += " ORDER BY nome ";
             
-            result = Conexao.stmt.executeQuery(SQL);
+            result = Conexao.stmt.executeQuery(wSql);
             
             Vector<Object> linha;
             while(result.next()) {
@@ -198,6 +199,7 @@ public class CandidatoController {
             wSql += " COALESCE(telefone,'') as telefone, COALESCE(email,'') as email ";
             wSql += " FROM candidatos ";
             wSql += " WHERE id = '" + id + "'";
+            wSql += " AND COALESCE(excluido,false) is false ";
 
             try{
                 System.out.println("Vai Executar Conexão em buscar");
@@ -231,15 +233,15 @@ public class CandidatoController {
         return objCandidato;
     }
     
-    /*public boolean excluir(){
+    public boolean excluir(Candidato objeto){
         
         Conexao.abreConexao();
         Connection con = Conexao.getConnection();
         PreparedStatement stmt = null;
         
         try {
-            stmt = con.prepareStatement("???");
-            stmt.setInt(1, objCandidato.getId());
+            stmt = con.prepareStatement("UPDATE candidatos SET excluido = true WHERE id=?");
+            stmt.setInt(1, objeto.getId());
                         
             stmt.executeUpdate();
             
@@ -251,6 +253,6 @@ public class CandidatoController {
         }finally{
             Conexao.closeConnection(con, stmt);
         }
-    }*/
+    }
     
 }
