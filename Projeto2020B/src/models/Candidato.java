@@ -8,6 +8,7 @@ public class Candidato {
     private String data_nascimento;
     private String telefone;
     private String email;
+    private Double salario;
     private boolean excluido;
 
     public int getId() {
@@ -33,6 +34,16 @@ public class Candidato {
     public void setId_bairro(int id_bairro) {
         this.id_bairro = id_bairro;
     }
+
+    public Double getSalario() {
+        return salario;
+    }
+
+    public void setSalario(Double salario) {
+        this.salario = salario;
+    }
+    
+    
 
     public String getData_nascimento() {
         return data_nascimento;

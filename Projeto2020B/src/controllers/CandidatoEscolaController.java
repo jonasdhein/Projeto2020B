@@ -23,11 +23,12 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import models.Candidato;
+import models.CandidatoEscola;
 /**
  *
  * @author Jonas Dhein
  */
-public class CandidatoController {
+public class CandidatoEscolaController {
     
     //Candidato objCandidato;
     //JTable jtbCandidatos = null;
@@ -37,20 +38,16 @@ public class CandidatoController {
         this.jtbCandidatos = jtbCandidatos;
     }*/
     
-    public boolean incluir(Candidato objeto){
+    public boolean incluir(CandidatoEscola objeto){
         
         Conexao.abreConexao();
         Connection con = Conexao.getConnection();
         PreparedStatement stmt = null;
         
         try{
-            stmt = con.prepareStatement("INSERT INTO candidatos(nome, id_bairro, data_nascimento, telefone, email) VALUES(?,?,?,?,?)");
-            stmt.setString(1, objeto.getNome());
-            stmt.setInt(2, objeto.getId_bairro());
-            Date data_nasc = Date.valueOf(objeto.getData_nascimento());  
-            stmt.setDate(3, data_nasc);
-            stmt.setString(4, objeto.getTelefone());
-            stmt.setString(5, objeto.getEmail());
+            stmt = con.prepareStatement("INSERT INTO candidatos_escolas(id_candidato, id_escola) VALUES(?,?)");
+            stmt.setInt(1, objeto.getId_candidato());
+            stmt.setInt(2, objeto.getId_escola());
             
             stmt.executeUpdate();
             
@@ -66,36 +63,7 @@ public class CandidatoController {
         }
     }
     
-    public boolean alterar(Candidato objeto){
-        
-        Conexao.abreConexao();
-        Connection con = Conexao.getConnection();
-        PreparedStatement stmt = null;
-        
-        try {
-            stmt = con.prepareStatement("UPDATE candidatos SET nome=?, id_bairro=?, data_nascimento=?, telefone=?, email=?, salario=? WHERE id=?");
-            stmt.setString(1, objeto.getNome());
-            stmt.setInt(2, objeto.getId_bairro());
-            Date data_nasc = Date.valueOf(objeto.getData_nascimento());  
-            stmt.setDate(3, data_nasc);
-            stmt.setString(4, objeto.getTelefone());
-            stmt.setString(5, objeto.getEmail());
-            stmt.setDouble(6, objeto.getSalario());
-            stmt.setInt(7, objeto.getId());
-            
-            stmt.executeUpdate();
-            
-        } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
-            return false;
-        }finally{
-            Conexao.closeConnection(con, stmt);
-            return true;
-        }
-        
-    }
-    
-    public void preencher(JTable jtbCandidatos) {
+    public void preencher(JTable jtbCandidatos, int id_candidato) {
 
         Conexao.abreConexao();
         
@@ -103,8 +71,7 @@ public class CandidatoController {
         Vector dadosTabela = new Vector(); //receber os dados do banco
         
         cabecalhos.add("#");
-        cabecalhos.add("Nome");
-        cabecalhos.add("Nascimento");
+        cabecalhos.add("Escola");
         cabecalhos.add("E");
              
         ResultSet result = null;
@@ -112,10 +79,10 @@ public class CandidatoController {
         try {
 
             String wSql = "";
-            wSql = " SELECT id, nome, TO_CHAR(data_nascimento, 'dd/mm/yyyy') as data_formatada ";
-            wSql += " FROM candidatos ";
-            wSql += " WHERE COALESCE(excluido,false) is false ";
-            wSql += " ORDER BY nome ";
+            wSql = " SELECT id, id_escola ";
+            wSql += " FROM candidatos_escolas ";
+            wSql += " WHERE id_candidato = " + id_candidato;
+            wSql += " ORDER BY id_escola ";
             
             result = Conexao.stmt.executeQuery(wSql);
             
@@ -125,7 +92,6 @@ public class CandidatoController {
                 
                 linha.add(result.getInt(1));
                 linha.add(result.getString(2));
-                linha.add(result.getString(3));
                 linha.add("X");
                 
                 dadosTabela.add(linha);
@@ -150,17 +116,14 @@ public class CandidatoController {
 
         // redimensiona as colunas de uma tabela
         TableColumn column = null;
-        for (int i = 0; i <= 3; i++) {
+        for (int i = 0; i <= 2; i++) {
             column = jtbCandidatos.getColumnModel().getColumn(i);
             switch (i) {
                 case 0:
                     column.setPreferredWidth(60);
                     break;
                 case 1:
-                    column.setPreferredWidth(200);
-                    break;
-                case 2:
-                    column.setPreferredWidth(90);
+                    column.setPreferredWidth(150);
                     break;
                 case 3:
                     column.setPreferredWidth(10);

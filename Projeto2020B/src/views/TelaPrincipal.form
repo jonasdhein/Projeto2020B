@@ -27,6 +27,24 @@
             </MenuItem>
           </SubComponents>
         </Menu>
+        <Menu class="javax.swing.JMenu" name="jMenu2">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Relat&#xf3;rios"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenu2ActionPerformed"/>
+          </Events>
+          <SubComponents>
+            <MenuItem class="javax.swing.JMenuItem" name="mnRelatorioCandidatos">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Relat&#xf3;rio de Candidatos"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnRelatorioCandidatosActionPerformed"/>
+              </Events>
+            </MenuItem>
+          </SubComponents>
+        </Menu>
         <Menu class="javax.swing.JMenu" name="mnSair">
           <Properties>
             <Property name="text" type="java.lang.String" value="Sair"/>
@@ -63,8 +81,8 @@
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="1" attributes="0">
-              <EmptySpace pref="425" max="32767" attributes="0"/>
-              <Component id="lblNomeUsuario" min="-2" pref="183" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="415" max="-2" attributes="0"/>
+              <Component id="lblNomeUsuario" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
@@ -73,7 +91,7 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="lblNomeUsuario" min="-2" max="-2" attributes="0"/>
+              <Component id="lblNomeUsuario" max="-2" attributes="0"/>
               <EmptySpace pref="390" max="32767" attributes="0"/>
           </Group>
       </Group>

@@ -1,7 +1,15 @@
 package views;
 
+import controllers.RelatorioController;
+import java.sql.ResultSet;
+import java.util.HashMap;
 import tools.CaixaDeDialogo;
 import models.Usuario;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRResultSetDataSource;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.view.JasperViewer;
 
 /**
  *
@@ -16,9 +24,13 @@ public class TelaPrincipal extends javax.swing.JFrame {
     
     public TelaPrincipal() {
         initComponents();
-        this.setExtendedState(TelaPrincipal.MAXIMIZED_BOTH);
+        //this.setExtendedState(TelaPrincipal.MAXIMIZED_BOTH);
         
-        lblNomeUsuario.setText("Bem-Vindo " + usuarioLogado.getNome());
+        try{
+            lblNomeUsuario.setText("Bem-Vindo " + usuarioLogado.getNome());
+        }catch(Exception ex){
+            
+        }
     }
 
     /**
@@ -35,6 +47,8 @@ public class TelaPrincipal extends javax.swing.JFrame {
         jMenu1 = new javax.swing.JMenu();
         mnBairros = new javax.swing.JMenuItem();
         mnCandidatos = new javax.swing.JMenuItem();
+        jMenu2 = new javax.swing.JMenu();
+        mnRelatorioCandidatos = new javax.swing.JMenuItem();
         mnSair = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -64,6 +78,23 @@ public class TelaPrincipal extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenu1);
 
+        jMenu2.setText("Relatórios");
+        jMenu2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenu2ActionPerformed(evt);
+            }
+        });
+
+        mnRelatorioCandidatos.setText("Relatório de Candidatos");
+        mnRelatorioCandidatos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnRelatorioCandidatosActionPerformed(evt);
+            }
+        });
+        jMenu2.add(mnRelatorioCandidatos);
+
+        jMenuBar1.add(jMenu2);
+
         mnSair.setText("Sair");
         mnSair.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -79,8 +110,8 @@ public class TelaPrincipal extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(425, Short.MAX_VALUE)
-                .addComponent(lblNomeUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(415, 415, 415)
+                .addComponent(lblNomeUsuario)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -106,8 +137,30 @@ public class TelaPrincipal extends javax.swing.JFrame {
 
 
     private void mnSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnSairActionPerformed
-        dispose();
+        
     }//GEN-LAST:event_mnSairActionPerformed
+
+    private void mnRelatorioCandidatosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnRelatorioCandidatosActionPerformed
+        try{
+            String wSelect = " SELECT id, nome FROM candidatos ORDER BY nome ";
+            
+            RelatorioController objRelController = new RelatorioController();
+            ResultSet resultSet = objRelController.buscarRelatorio(wSelect);//Buscar os dados do relatório
+            
+            JRResultSetDataSource relResult = new JRResultSetDataSource(resultSet);//Passa um resultSet para a fonte de dados do relatório
+            JasperPrint jpPrint = JasperFillManager.fillReport("ireport/RelatorioUsuarios.jasper", new HashMap(), relResult);//Prepara o relatório para ser impresso, recebe o gerenciador JASPER
+            JasperViewer jpViewer = new JasperViewer(jpPrint, false); //
+            jpViewer.setVisible(true);//abre o relatório para visualização
+            jpViewer.toFront();//define o form a frente da aplicação
+        
+        }catch(JRException ex){
+            CaixaDeDialogo.obterinstancia().exibirMensagem("Erro: " + ex.getMessage(), 'e');
+        }
+    }//GEN-LAST:event_mnRelatorioCandidatosActionPerformed
+
+    private void jMenu2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu2ActionPerformed
+        
+    }//GEN-LAST:event_jMenu2ActionPerformed
 
 
     /**
@@ -150,10 +203,12 @@ public class TelaPrincipal extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JLabel lblNomeUsuario;
     private javax.swing.JMenuItem mnBairros;
     private javax.swing.JMenuItem mnCandidatos;
+    private javax.swing.JMenuItem mnRelatorioCandidatos;
     private javax.swing.JMenu mnSair;
     // End of variables declaration//GEN-END:variables
 }
