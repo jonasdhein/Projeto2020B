@@ -343,8 +343,9 @@ public class CadCandidatos extends javax.swing.JFrame {
                 
                 objCandidato.setNome(txtNome.getText());
                 String data = Formatacao.ajustaDataAMD(txtDataNasc.getText());
-                objCandidato.setData_nascimento(data);
+                objCandidato.setData_nascimento(data); //2020-11-12
                 objCandidato.setEmail(txtEmail.getText());
+                
                 String telefone = Formatacao.retornaApenasNumeros(txtTelefone.getText());
                 objCandidato.setTelefone(telefone);
                 

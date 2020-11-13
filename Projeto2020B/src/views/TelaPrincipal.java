@@ -3,6 +3,7 @@ package views;
 import controllers.RelatorioController;
 import java.sql.ResultSet;
 import java.util.HashMap;
+import java.util.Map;
 import tools.CaixaDeDialogo;
 import models.Usuario;
 import net.sf.jasperreports.engine.JRException;
@@ -43,6 +44,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
     private void initComponents() {
 
         lblNomeUsuario = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         mnBairros = new javax.swing.JMenuItem();
@@ -57,6 +59,10 @@ public class TelaPrincipal extends javax.swing.JFrame {
         lblNomeUsuario.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         lblNomeUsuario.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lblNomeUsuario.setText("Bem-vindo FULANO");
+
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/fundo_galaxia.jpg"))); // NOI18N
+        jLabel1.setText("jLabel1");
 
         jMenu1.setText("Cadastros");
 
@@ -109,17 +115,15 @@ public class TelaPrincipal extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(415, 415, 415)
-                .addComponent(lblNomeUsuario)
-                .addContainerGap())
+            .addComponent(lblNomeUsuario, javax.swing.GroupLayout.Alignment.TRAILING)
+            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 594, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(lblNomeUsuario)
-                .addContainerGap(390, Short.MAX_VALUE))
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 378, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblNomeUsuario))
         );
 
         pack();
@@ -141,21 +145,8 @@ public class TelaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_mnSairActionPerformed
 
     private void mnRelatorioCandidatosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnRelatorioCandidatosActionPerformed
-        try{
-            String wSelect = " SELECT id, nome FROM candidatos ORDER BY nome ";
-            
-            RelatorioController objRelController = new RelatorioController();
-            ResultSet resultSet = objRelController.buscarRelatorio(wSelect);//Buscar os dados do relatório
-            
-            JRResultSetDataSource relResult = new JRResultSetDataSource(resultSet);//Passa um resultSet para a fonte de dados do relatório
-            JasperPrint jpPrint = JasperFillManager.fillReport("ireport/RelatorioUsuarios.jasper", new HashMap(), relResult);//Prepara o relatório para ser impresso, recebe o gerenciador JASPER
-            JasperViewer jpViewer = new JasperViewer(jpPrint, false); //
-            jpViewer.setVisible(true);//abre o relatório para visualização
-            jpViewer.toFront();//define o form a frente da aplicação
-        
-        }catch(JRException ex){
-            CaixaDeDialogo.obterinstancia().exibirMensagem("Erro: " + ex.getMessage(), 'e');
-        }
+        RelatorioCandidatos tela = new RelatorioCandidatos();
+        tela.setVisible(true);
     }//GEN-LAST:event_mnRelatorioCandidatosActionPerformed
 
     private void jMenu2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu2ActionPerformed
@@ -202,6 +193,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
